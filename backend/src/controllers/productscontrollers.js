@@ -12,6 +12,7 @@ productsControllers.getProducts = async (req, res) => {
 productsControllers.postProducts = async (req, res) => {
     const { name, description, price, stock } = req.body;
     const newProduct = new productsModel({ name, description, price, stock})
+    await newProduct.save()
     res.json(products)
 }
 

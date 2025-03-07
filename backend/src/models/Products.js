@@ -14,15 +14,15 @@ const productsSchema = new Schema({
         type: String,
         require: true
     },
-    descriptiom: {
+    description: {
         type: String
     },
-    precio: {
+    price: {
         type: Number,
         require: true,
         min: 0
     },
-    name: {
+    stock: {
         type: Number,
         require: true,
         min: 0
