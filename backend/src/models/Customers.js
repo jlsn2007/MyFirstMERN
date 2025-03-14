@@ -20,18 +20,15 @@ email: {
 },
 password: {
     type: String,
-    require: true,
-    min: 8
+    require: true
 },
 telephone: {
     type: Number,
-    min: 8,
     require: true
 },
 dui: {
     type: Number,
     require: true,
-    max: 9
 },
 isVerified: {
     type: Boolean,
