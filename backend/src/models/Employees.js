@@ -39,12 +39,10 @@ telephone: {
 dui: {
     type: Number,
     require: true,
-    max: 9
 },
 isssNumber: {
     type: Number,
     require: true,
-    max: 9
 },
 isVerified: {
     type: Boolean,
