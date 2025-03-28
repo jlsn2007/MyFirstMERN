@@ -18,11 +18,11 @@ connection.once("open", () => {
     console.log("DB is Connected");
 });
 
-connection.once("disconnected", () => {
+connection.on("disconnected", () => {
     console.log("DB is Disconnected");
 });
 
-connection.once("error", () => {
-    console.log("error found" + error);
+connection.on("error", (error) => {
+    console.log("error found: "  + error);
 });
 
