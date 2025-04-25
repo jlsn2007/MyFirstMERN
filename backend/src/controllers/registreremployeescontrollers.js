@@ -14,7 +14,7 @@ registrerEmployeesController.registrer = async(req, res)=> {
         // Verificar la existencia del empleado, porque si ya existe ya no se debe guardar para evitar que se duplique el usuario
         const existEmployee = await Employees.findOne({email})
         if(existEmployee) {
-            return res.json ({message: "Emplyee already exist"})
+            return res.json ({message: "Employee already exist"})
         }
     
         // Encriptar la contra

@@ -1,10 +1,3 @@
-/*
-    Campos:
-    Comment
-    Rating
-    idClient
-*/
-
 import { Schema, model } from "mongoose";
 
 const reviewSchema = new Schema ({
