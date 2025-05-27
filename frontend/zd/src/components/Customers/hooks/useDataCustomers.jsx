@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import toast, {Toaster} from 'react-hot-toast';
 
+const formatDate = (dateString) => {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  return date.toISOString().split("T")[0]; 
+};
 
 const useDataCustomers = () => {
 
@@ -32,22 +37,31 @@ const useDataCustomers = () => {
             fetchCustomers();
         }, []);
     
-      const saveCustomer = async (e) => {
+      const saveCustomers = async (e) => {
         e.preventDefault();
 
-        if (!name || !description || !price || !stock) {
+        if (
+          !name       || 
+          !lastname   || 
+          !birthday   || 
+          !email      || 
+          !password   || 
+          !telephone  ||
+          !dui        ||  
+          !isVerified
+        ) {
             toast.error('Todos los campos son obligatorios');
             return;
         }
 
         try {
             const newCustomer = {
-            name, 
-            lastname, 
-            birthday, 
-            email, 
-            password, 
-            telephone, 
+            name,       
+            lastname,
+            birthday,  
+            email,    
+            password,  
+            telephone,  
             dui, 
             isVerified,
          };
@@ -98,7 +112,7 @@ const useDataCustomers = () => {
       fetchCustomers(); 
     } catch (error) {
       console.error("Error deleting customer:", error);
-      toast.error("Error al eliminar el cliente");
+      toast.error("Error al eliminar el customer");
     }
   };
     
@@ -106,7 +120,7 @@ const useDataCustomers = () => {
         setId(dataCustomer._id);
         setName(dataCustomer.name);
         setLastname(dataCustomer.lastname);
-        setBirthday(dataCustomer.birthday);
+        setBirthday(formatDate(dataCustomer.birthday));
         setEmail(dataCustomer.email);
         setPassword(dataCustomer.password);
         setTelephone(dataCustomer.telephone);
@@ -148,7 +162,6 @@ const useDataCustomers = () => {
           setId("");
           fetchCustomers();
         } catch (error) {
-          console.error("Error:", errorCliente);
           alert("Error al actualizar el cliente");
         } 
       };
@@ -179,7 +192,7 @@ const useDataCustomers = () => {
             loading,
             setLoading,
             fetchCustomers,
-            saveCustomer,
+            saveCustomers,
             deleteCustomers,
             updateCustomers,
             handleEdit,

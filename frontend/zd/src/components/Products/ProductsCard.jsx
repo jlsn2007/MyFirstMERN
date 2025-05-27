@@ -26,7 +26,7 @@ return (
                     colorClass={"danger"}
                 />
                 <Button
-                    label={"Editar Información"}
+                    label={"Editar"}
                     actionButton={() => updateProducts(product)}
                     colorClass={"warning"}
                 />

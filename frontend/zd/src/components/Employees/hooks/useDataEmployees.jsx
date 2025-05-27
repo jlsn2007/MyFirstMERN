@@ -1,224 +1,226 @@
 import React, { useState, useEffect } from "react";
-import toast from 'react-hot-toast';
+import toast, {Toaster} from 'react-hot-toast';
+
+const formatDate = (dateString) => {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  return date.toISOString().split("T")[0]; 
+};
 
 const useDataEmployees = () => {
 
-  const ApiRegister = "http://localhost:4000/api/Registreremployees";
-  const ApiEmployees = "http://localhost:4000/api/employees";
+    const ApiEmployees ="http://localhost:4000/api/employees";
+    const [activeTab, setActiveTab] = useState("list");
+      const [id, setId] = useState("");
+      const [name, setName] = useState("");
+      const [lastname, setLastname] = useState("");
+      const [birthday, setBirthday] = useState("");
+      const [email, setEmail] = useState("");
+      const [address, setAddress] = useState("");
+      const [hireDate, setHireDate] = useState("");
+      const [password, setPassword] = useState("");
+      const [telephone, setTelephone] = useState("");
+      const [dui, setDui] = useState("");
+      const [isssNumber, setIsssNumber] = useState("");
+      const [isVerified, setIsVerified] = useState("");
+      const [loading, setLoading] = useState(false);
+      const [employees, setEmployees] = useState([]);
 
-  const [activeTab, setActiveTab] = useState("list");
+      const fetchEmployees = async () => {
+        const response = await fetch(ApiEmployees);
+            if (!response.ok) {
+                throw new Error("Hubo un error al obtener los empleados");
+            }
+        const data = await response.json();
+        setEmployees(data);
+        setLoading(false);
+        };
 
-  const [id, setId] = useState("");
-  const [name, setName] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [telephone, setTelephone] = useState("");
-  const [dui, setDui] = useState("");
-  const [address, setAddress] = useState("");
-  const [birthdate, setBirthdate] = useState("");
-  const [hireDate, setHireDate] = useState("");
-  const [isssNumber, setIsssNumber] = useState("");
-  const [isVerified, setIsVerified] = useState(false);
+        useEffect(() => {
+            fetchEmployees();
+        }, []);
+    
+      const saveEmployees = async (e) => {
+        e.preventDefault();
 
-  const [errorEmpleado, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [employees, setEmployees] = useState([]);
+        if (
+          !name       || 
+          !lastname   || 
+          !birthday   || 
+          !email      ||
+          !address    || 
+          !hireDate   || 
+          !password   || 
+          !telephone  ||
+          !dui        || 
+          !isssNumber || 
+          !isVerified
+        ) {
+            toast.error('Todos los campos son obligatorios');
+            return;
+        }
 
-  const cleanData = () => {
+        try {
+            const newEmployee = {
+            name,       
+            lastname,
+            birthday,  
+            email, 
+            address,    
+            hireDate,   
+            password,  
+            telephone,  
+            dui, 
+            isssNumber,
+            isVerified,
+         };
+
+            const response = await fetch(ApiEmployees, {
+                method: "POST",
+                 headers: { "Content-Type": "application/json",
+                 },
+                credentials: "include",
+                body: JSON.stringify(newEmployee),
+            });
+
+        if (!response.ok) {
+            throw new Error("Hubo un error al registrar el empleado");
+        }
+
+    toast.success('Empleado registrado');
+
+    await fetchEmployees();
+
     setName("");
     setLastname("");
+    setBirthday("");
     setEmail("");
+    setAddress("");
+    setHireDate("");
     setPassword("");
     setTelephone("");
     setDui("");
-    setAddress("");
-    setBirthdate("");
-    setHireDate("");
     setIsssNumber("");
-    setIsVerified(false);
-    setId("");
-  };
+    setIsVerified("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (
-      !name || !lastname || !email || !password || !telephone ||
-      !dui || !address || !birthdate || !hireDate || !isssNumber || !isVerified
-    ) {
-      setError("Todos los campos son obligatorios");
-      toast.error("Todos los campos son obligatorios");
-      return;
-    }
-
-    const newEmployee = {
-      name,
-      lastname,
-      email,
-      password,
-      telephone: Number(telephone),
-      dui: Number(dui),
-      address,
-      birthdate,
-      hireDate,
-      isssNumber: Number(isssNumber),
-      isVerified,
-    };
-
-    try {
-      const response = await fetch(ApiRegister, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newEmployee),
-      });
-
-      if (!response.ok) throw new Error("Error al registrar el empleado");
-
-      const data = await response.json();
-      toast.success("Empleado registrado");
-      setSuccess("Empleado registrado correctamente");
-      cleanData();
-      fetchData();
-    } catch (error) {
-      setError(error.message);
-      toast.error("Ocurrió un error al registrar el empleado");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch(ApiEmployees);
-      if (!response.ok) throw new Error("Error en la red");
-      const data = await response.json();
-      setEmployees(data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const deleteEmployee = async (id) => {
+  } catch (error) {
+    console.error("Error:", error);
+    toast.error('Ocurrió un error al registrar el empleado');
+  } finally {
+    setLoading(false);
+  }
+};
+        
+     const deleteEmployees = async (id) => {
     try {
       const response = await fetch(`${ApiEmployees}/${id}`, {
         method: "DELETE",
       });
 
-      if (!response.ok) throw new Error("Error al eliminar empleado");
-
+      if (!response.ok) {
+        throw new Error("Error al eliminar el empleado");
+      }
       toast.success("Empleado eliminado");
-      fetchData();
+      fetchEmployees(); 
     } catch (error) {
       console.error("Error deleting employee:", error);
+      toast.error("Error al eliminar el employee");
     }
   };
+    
+      const updateEmployees = async (dataEmployee) => {
+        setId(dataEmployee._id);
+        setName(dataEmployee.name);
+        setLastname(dataEmployee.lastname);
+        setBirthday(formatDate(dataEmployee.birthday));
+        setEmail(dataEmployee.email);
+        setAddress(dataEmployee.address);
+        setHireDate(formatDate(dataEmployee.hireDate));
+        setPassword(dataEmployee.password);
+        setTelephone(dataEmployee.telephone);
+        setDui(dataEmployee.dui);
+        setIsssNumber(dataEmployee.isssNumber);
+        setIsVerified(dataEmployee.isVerified);
+        setActiveTab("form");
+      };
+    
+      const handleEdit = async (e) => {
+        e.preventDefault();
+    
+        try {
+          const editEmployee = {
+            name: name,
+            lastname: lastname,
+            birthday: birthday,
+            email: email,
+            address: address,
+            hireDate: hireDate,
+            password: password,
+            telephone: telephone,
+            dui: dui,
+            isssNumber: isssNumber,
+            isVerified: isVerified,
+          };
+    
+          const response = await fetch( `${ApiEmployees}/${id}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(editEmployee),
+            });
+    
+          if (!response.ok) {
+            throw new Error("Error al actualizar el empleado");
+          }
 
-  const updateEmployee = (dataEmployee) => {
-    setId(dataEmployee._id);
-    setName(dataEmployee.name);
-    setLastname(dataEmployee.lastname);
-    setEmail(dataEmployee.email);
-    setTelephone(dataEmployee.telephone);
-    setDui(dataEmployee.dui);
-    setAddress(dataEmployee.address);
-    setBirthdate(dataEmployee.birthdate);
-    setHireDate(dataEmployee.hireDate);
-    setIsssNumber(dataEmployee.isssNumber);
-    setIsVerified(dataEmployee.isVerified);
-    setError(null);
-    setSuccess(null);
-    setActiveTab("form");
+          const data = await response.json();
+          toast.success('Empleado actualizado');
+          setEmployees(data)
+          setId("");
+          fetchEmployees();
+        } catch (error) {
+          alert("Error al actualizar el empleado");
+        } 
+      };
+
+        return {
+            activeTab,
+            setActiveTab,
+            id,
+            setId,
+            name,
+            setName,
+            lastname,
+            setLastname,
+            birthday,
+            setBirthday,
+            email,
+            setEmail,
+            address,
+            setAddress,
+            hireDate,
+            setHireDate,
+            password,
+            setPassword,
+            telephone,
+            setTelephone,
+            dui,
+            setDui,
+            isssNumber,
+            setIsssNumber,
+            isVerified,
+            setIsVerified,
+            employees,
+            setEmployees,
+            loading,
+            setLoading,
+            fetchEmployees,
+            saveEmployees,
+            deleteEmployees,
+            updateEmployees,
+            handleEdit,
+        };
   };
-
-  const handleUpdate = async (e) => {
-    e.preventDefault();
-
-    const updatedEmployee = {
-      name,
-      lastname,
-      email,
-      password,
-      telephone: Number(telephone),
-      dui: Number(dui),
-      address,
-      birthdate,
-      hireDate,
-      isssNumber: Number(isssNumber),
-      isVerified,
-    };
-
-    try {
-      const response = await fetch(`${ApiEmployees}/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedEmployee),
-      });
-
-      if (!response.ok) throw new Error("Error al actualizar el empleado");
-
-      toast.success("Empleado actualizado");
-      setSuccess("Empleado actualizado correctamente");
-      cleanData();
-      setActiveTab("list");
-      fetchData();
-    } catch (error) {
-      setError(error.message);
-      toast.error("Error al actualizar el empleado");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return {
-    activeTab,
-    setActiveTab,
-    id,
-    setId,
-    name,
-    setName,
-    lastname,
-    setLastname,
-    email,
-    setEmail,
-    password,
-    setPassword,
-    telephone,
-    setTelephone,
-    dui,
-    setDui,
-    address,
-    setAddress,
-    birthdate,
-    setBirthdate,
-    hireDate,
-    setHireDate,
-    isssNumber,
-    setIsssNumber,
-    isVerified,
-    setIsVerified,
-    errorEmpleado,
-    setError,
-    success,
-    setSuccess,
-    loading,
-    setLoading,
-    employees,
-    setEmployees,
-    cleanData,
-    handleSubmit,
-    fetchData,
-    deleteEmployee,
-    updateEmployee,
-    handleUpdate,
-  };
-};
 
 export default useDataEmployees;

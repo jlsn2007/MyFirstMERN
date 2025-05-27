@@ -1,55 +1,46 @@
 import React, { useEffect } from "react";
 import RegisterEmployees from "../components/Employees/RegisterEmployees";
-import ListEmployees from "../components/Employees/Employeeslist";
+import EmployeesList from "../components/Employees/Employeeslist";
 import { Toaster } from "react-hot-toast";
 import useDataEmployees from "../components/Employees/hooks/useDataEmployees";
 
 const Employees = () => {
-  useEffect(() => {
-    document.title = "Empleados";
-  }, []);
-
   const {
     activeTab,
-    setActiveTab,
-    id,
-    setId,
-    name,
-    setName,
-    lastname,
-    setLastname,
-    birthdate,
-    setBirthdate,
-    email,
-    setEmail,
-    address,
-    setAddress,
-    hireDate,
-    setHireDate,
-    password,
-    setPassword,
-    telephone,
-    setTelephone,
-    dui,
-    setDui,
-    isssNumber,
-    setIsssNumber,
-    isVerified,
-    setIsVerified,
-    errorEmpleado,
-    setError,
-    success,
-    setSuccess,
-    loading,
-    setLoading,
-    employees,
-    setEmployees,
-    cleanData,
-    handleSubmit,
-    fetchData,
-    deleteEmployee,
-    updateEmployee,
-    handleUpdate,
+            setActiveTab,
+            id,
+            setId,
+            name,
+            setName,
+            lastname,
+            setLastname,
+            birthday,
+            setBirthday,
+            email,
+            setEmail,
+            address,
+            setAddress,
+            hireDate,
+            setHireDate,
+            password,
+            setPassword,
+            telephone,
+            setTelephone,
+            dui,
+            setDui,
+            isssNumber,
+            setIsssNumber,
+            isVerified,
+            setIsVerified,
+            employees,
+            setEmployees,
+            loading,
+            setLoading,
+            saveEmployees,
+            deleteEmployees,
+            updateEmployees,
+            handleEdit,
+
   } = useDataEmployees();
 
   return (
@@ -72,7 +63,6 @@ const Employees = () => {
               }`}
               onClick={() => {
                 setActiveTab("form");
-                cleanData();
               }}
             >
               Gestionar Empleados
@@ -80,14 +70,11 @@ const Employees = () => {
           </div>
           <div>
             {activeTab === "list" && (
-              <ListEmployees
-                setId={setId}
-                setActiveTab={setActiveTab}
-                updateEmployee={updateEmployee}
-                handleUpdate={handleUpdate}
-                deleteEmployee={deleteEmployee}
+              <EmployeesList
                 employees={employees}
                 loading={loading}
+                updateEmployees={updateEmployees}
+                deleteEmployees={deleteEmployees}
               />
             )}
             {activeTab === "form" && (
@@ -97,9 +84,9 @@ const Employees = () => {
                 name={name}
                 setName={setName}
                 lastname={lastname}
-                setLastName={setLastname}
-                birthdate={birthdate}
-                setBirthdate={setBirthdate}
+                setLastname={setLastname}
+                birthday={birthday}
+                setBirthday={setBirthday}
                 email={email}
                 setEmail={setEmail}
                 address={address}
@@ -116,17 +103,12 @@ const Employees = () => {
                 setIsssNumber={setIsssNumber}
                 isVerified={isVerified}
                 setIsVerified={setIsVerified}
-                errorEmpleado={errorEmpleado}
-                setError={setError}
-                success={success}
-                setSuccess={setSuccess}
                 loading={loading}
                 setLoading={setLoading}
                 employees={employees}
                 setEmployees={setEmployees}
-                cleanData={cleanData}
-                handleSubmit={handleSubmit}
-                handleUpdate={handleUpdate}
+                saveEmployees={saveEmployees}
+                handleEdit={handleEdit}
               />
             )}
           </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import toast, {Toaster} from 'react-hot-toast';
 
 
-const useDataProducts = () => {
+const useDataEmployees = () => {
 
     const ApiProducts ="http://localhost:4000/api/products";
     const [activeTab, setActiveTab] = useState("list");
@@ -157,4 +157,4 @@ const useDataProducts = () => {
         };
   };
 
-export default useDataProducts;
+export default useDataEmployees;

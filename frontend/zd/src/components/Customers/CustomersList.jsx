@@ -8,7 +8,7 @@ const CustomersList = ({ customers, deleteCustomers, updateCustomers }) => {
         Listado de Clientes
       </h1>
       <div className="flex flex-wrap gap-4 justify-center mt-5">
-        {customers?.length===0 && <div className="text-center text-gray-500">Cargando Clientes...</div>}
+        {customers?.length===0 && <div className="text-center text-gray-500">Cargando...</div>}
 
         {customers?.map((customer) => (
           <CustomersCard
