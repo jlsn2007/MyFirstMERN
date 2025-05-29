@@ -20,7 +20,7 @@ const app = express();
 
 app.use(
     cors({
-      origin: 'http://localhost:5173', 
+      origin: 'https://my-first-mern-h6w6.vercel.app', 
       credentials: true, // Permitir envío de cookies y credenciales
     })
   );

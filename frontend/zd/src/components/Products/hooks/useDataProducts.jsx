@@ -4,7 +4,7 @@ import toast, {Toaster} from 'react-hot-toast';
 
 const useDataEmployees = () => {
 
-    const ApiProducts ="http://localhost:4000/api/products";
+    const ApiProducts ="https://myfirstmern.onrender.com/api/products";
     const [activeTab, setActiveTab] = useState("list");
       const [id, setId] = useState("");
       const [name, setName] = useState("");

@@ -9,7 +9,7 @@ const formatDate = (dateString) => {
 
 const useDataCustomers = () => {
 
-    const ApiCustomers ="http://localhost:4000/api/customers";
+    const ApiCustomers ="https://myfirstmern.onrender.com/api/customers";
     const [activeTab, setActiveTab] = useState("list");
       const [id, setId] = useState("");
       const [name, setName] = useState("");
